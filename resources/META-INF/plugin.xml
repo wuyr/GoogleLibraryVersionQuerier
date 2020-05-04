@@ -22,7 +22,10 @@
 
     <depends>com.intellij.modules.lang</depends>
 
-    <extensions defaultExtensionNs="com.intellij"/>
+    <extensions defaultExtensionNs="com.intellij">
+        <completion.contributor language="any" order="first"
+                                implementationClass="com.wuyr.google_library_query.GradleContributor"/>
+    </extensions>
 
     <actions>
         <action id="com.wuyr.google_library_query.QueryAction" class="com.wuyr.google_library_query.QueryAction"

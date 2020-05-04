@@ -102,6 +102,7 @@ class QueryAction : AnAction() {
                     latestVersion = children[children.size - 2].text()
                 }
             }
+
             return latestVersion
         }
 

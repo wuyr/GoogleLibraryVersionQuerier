@@ -1,0 +1,2 @@
+# GoogleLibraryVersionQuerier
+一款Android Studio插件，用于快速查询和替换Google最新版本仓库。

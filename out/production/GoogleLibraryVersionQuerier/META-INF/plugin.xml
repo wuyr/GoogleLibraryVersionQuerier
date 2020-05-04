@@ -1,0 +1,35 @@
+<idea-plugin>
+    <id>com.wuyr.google_library_query</id>
+    <name>Google Library Version Querier</name>
+    <version>1.0</version>
+    <vendor email="ifxcyr@gmail.com" url="https://www.github.com/wuyr">陈小缘</vendor>
+
+    <description><![CDATA[
+      <p>Query and replace the latest version of Google Library.</p>
+      <br/>
+      <p><strong>Github: </strong><a href="https://github.com/wuyr/GoogleLibraryVersionQuerier"> github.com/wuyr/GoogleLibraryVersionQuerier</a></p>
+      <br/>
+      <p>Powered by wanandroid.com</p>
+    ]]></description>
+
+    <change-notes><![CDATA[
+      <li><strong>1.0 </strong>Query and replace the latest version of Google Library.</li>
+      <br>
+    ]]>
+    </change-notes>
+
+    <idea-version since-build="173.0"/>
+
+    <depends>com.intellij.modules.lang</depends>
+
+    <extensions defaultExtensionNs="com.intellij"/>
+
+    <actions>
+        <action id="com.wuyr.google_library_query.QueryAction" class="com.wuyr.google_library_query.QueryAction"
+                text="Query The Latest Version" description="Query the latest version">
+            <add-to-group group-id="XmlGenerateToolsGroup"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="alt Q"/>
+        </action>
+    </actions>
+
+</idea-plugin>

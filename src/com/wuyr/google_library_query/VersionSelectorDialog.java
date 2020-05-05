@@ -5,6 +5,11 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+/**
+ * @author wuyr
+ * @github https://github.com/wuyr/GoogleLibraryVersionQuerier
+ * @since 2020-05-05 19:34
+ */
 public class VersionSelectorDialog extends JDialog {
     private JPanel contentPane;
     private JButton buttonCancel;

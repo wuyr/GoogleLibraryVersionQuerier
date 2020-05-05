@@ -8,6 +8,12 @@ import java.nio.charset.Charset
 import javax.net.ssl.HttpsURLConnection
 import javax.swing.DefaultListModel
 
+/**
+ * @author wuyr
+ * @github https://github.com/wuyr/GoogleLibraryVersionQuerier
+ * @since 2020-05-05 15:02
+ */
+
 const val BASE_URL = "https://wanandroid.com/maven_pom/"
 
 @Throws(java.lang.Exception::class)

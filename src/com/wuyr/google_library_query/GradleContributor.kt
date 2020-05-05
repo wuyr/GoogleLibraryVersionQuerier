@@ -8,7 +8,11 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.util.TextRange
 import com.intellij.util.PlatformIcons
 
-
+/**
+ * @author wuyr
+ * @github https://github.com/wuyr/GoogleLibraryVersionQuerier
+ * @since 2020-05-05 02:58
+ */
 class GradleContributor : CompletionContributor() {
 
     private var needShow = false

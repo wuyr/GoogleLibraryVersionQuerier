@@ -9,7 +9,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="jsoup" level="project" />
     <orderEntry type="library" name="gson" level="project" />
   </component>
 </module>

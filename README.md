@@ -7,7 +7,7 @@
 
 <br/>
 
-#### 2. 光标定位在目标类库，右键可快速查看和替换某个版本：
+#### 2. 光标定位到目标类库所在行，右键可快速查看和替换某个版本：
 ![preview](https://github.com/wuyr/GoogleLibraryVersionQuerier/raw/master/previews/3.gif) ![preview](https://github.com/wuyr/GoogleLibraryVersionQuerier/raw/master/previews/4.gif)
 
 ![preview](https://github.com/wuyr/GoogleLibraryVersionQuerier/raw/master/previews/5.png)

@@ -10,18 +10,18 @@
 #### 2. 光标定位在目标类库，右键可快速查看和替换某个版本：
 ![preview](https://github.com/wuyr/GoogleLibraryVersionQuerier/raw/master/previews/3.gif) ![preview](https://github.com/wuyr/GoogleLibraryVersionQuerier/raw/master/previews/4.gif)
 
-![preview](https://github.com/wuyr/GoogleLibraryVersionQuerier/raw/master/previews/5.gif)
+![preview](https://github.com/wuyr/GoogleLibraryVersionQuerier/raw/master/previews/5.png)
 
-![preview](https://github.com/wuyr/GoogleLibraryVersionQuerier/raw/master/previews/6.gif)
+![preview](https://github.com/wuyr/GoogleLibraryVersionQuerier/raw/master/previews/6.png)
 
-![preview](https://github.com/wuyr/GoogleLibraryVersionQuerier/raw/master/previews/7.gif)
+![preview](https://github.com/wuyr/GoogleLibraryVersionQuerier/raw/master/previews/7.png)
 
 <br/>
 
 ### 安装：
 *Android Studio -> Settings -> Plugins -> Marketplace*：<br/>搜索：***Google Library Version Querier***即可：
 
-![preview](https://github.com/wuyr/GoogleLibraryVersionQuerier/raw/master/previews/8.gif)
+![preview](https://github.com/wuyr/GoogleLibraryVersionQuerier/raw/master/previews/8.png)
 
 <br/>
 

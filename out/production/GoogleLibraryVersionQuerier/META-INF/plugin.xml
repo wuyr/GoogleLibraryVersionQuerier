@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.wuyr.google_library_query</id>
     <name>Google Library Version Querier</name>
-    <version>2.0</version>
+    <version>2.1</version>
     <vendor email="ifxcyr@gmail.com" url="https://www.github.com/wuyr">陈小缘</vendor>
 
     <description><![CDATA[
@@ -13,12 +13,13 @@
     ]]></description>
 
     <change-notes><![CDATA[
+      <p><li><strong>2.1 </strong>Bug fixes.</li></p>
+
       <p><li><strong>2.0 </strong>Add build.gradle dependency code completion and free choice of historical version.</li></p>
 
       <p><li><strong>1.0 </strong>Completed the function of finding and replacing the latest version of Google Library.</li></p>
       <br>
-    ]]>
-    </change-notes>
+    ]]></change-notes>
 
     <idea-version since-build="173.0"/>
 

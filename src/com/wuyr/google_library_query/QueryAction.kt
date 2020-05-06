@@ -29,6 +29,7 @@ class QueryAction : AnAction() {
 
             val semicolon = ":"
             if (!currentLineContent.contains(semicolon)) {
+                Messages.showErrorDialog("Please locate the line of the target library.", "Library Not Found")
                 return
             }
 
@@ -50,22 +51,23 @@ class QueryAction : AnAction() {
 
             try {
                 getAvailableVersions(libraryGroup, libraryName)?.let {
-                    VersionSelectorDialog.show(DefaultListModel<String>().apply {
-                        getAvailableVersions(libraryGroup, libraryName)?.forEach { addElement(it) }
-                    }) { latestVersion ->
+                    VersionSelectorDialog.show(DefaultListModel<String>().apply { it.forEach { addElement(it) } }) { selectedVersion ->
                         val oldVersionStart = currentLineContent.lastIndexOf(semicolon)
                         val oldVersionEnd = currentLineContent.lastIndexOf(if (isSingleQuotation) singleQuotation else doubleQuotation)
                         val oldVersionString = currentLineContent.substring(oldVersionStart, oldVersionEnd)
-                        val newLineContent = currentLineContent.replace(oldVersionString, semicolon + latestVersion)
+                        val newLineContent = currentLineContent.replace(oldVersionString, semicolon + selectedVersion)
 
                         WriteCommandAction.runWriteCommandAction(event.project) {
                             editor.document.replaceString(lineStartPosition, lineEndPosition, newLineContent)
                         }
                     }
                 }
-                        ?: Messages.showErrorDialog("Please check if the library belongs to Google.", "Library Not Found!")
+                        ?: Messages.showErrorDialog("Please check if the library belongs to Google.", "Library Not Found")
             } catch (e: Exception) {
-                Messages.showErrorDialog(StringWriter().apply { PrintWriter(this).apply { RuntimeException().printStackTrace(this) } }.toString(), "Error")
+                Messages.showErrorDialog(StringWriter().apply { PrintWriter(this).apply {
+                    println("Please copy the following log and go to https://github.com/wuyr/GoogleLibraryVersionQuerier to create a issues:\n")
+                    e.printStackTrace(this)
+                } }.toString(), "Error")
             }
         }
     }

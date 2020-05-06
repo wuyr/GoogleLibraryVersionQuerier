@@ -27,7 +27,6 @@ fun getAvailableVersions(libraryGroup: String, libraryName: String) = search("$l
     }
 }
 
-@Throws(java.lang.Exception::class)
 fun matchingLibraries(keyword: String) = ArrayList<Pair<String, String>>().apply {
     runSafely {
         search(keyword) { dataList ->

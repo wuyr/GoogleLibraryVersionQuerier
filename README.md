@@ -23,6 +23,8 @@
 
 ![preview](https://github.com/wuyr/GoogleLibraryVersionQuerier/raw/master/previews/8.png)
 
+或者直接到 [releases](https://github.com/wuyr/GoogleLibraryVersionQuerier/releases) 里下载最新版，然后把它拖进Android Studio中并重启。
+
 <br/>
 
 ### 数据来源：[wanandroid.com](https://wanandroid.com/maven_pom/index)

@@ -21,11 +21,12 @@
 <br/>
 
 ### 安装：
-*Android Studio -> Settings -> Plugins -> Marketplace*：<br/>搜索：***Google Library Version Querier***即可：
+插件还在等待jetbrains审核😭还没通过(可能因为疫情原因，未能及时处理)，所以现在暂时只能通过本地安装，抱歉！
+~~*Android Studio -> Settings -> Plugins -> Marketplace*：<br/>搜索：***Google Library Version Querier***即可~~：
 
 ![preview](https://github.com/wuyr/GoogleLibraryVersionQuerier/raw/master/previews/8.png)
 
-或者直接到 [releases](https://github.com/wuyr/GoogleLibraryVersionQuerier/releases) 里下载最新版，然后把它拖进Android Studio中并重启。
+或者直接到 [releases](https://github.com/wuyr/GoogleLibraryVersionQuerier/releases) 里下载最新版的zip，然后把它拖进Android Studio中并重启。
 
 <br/>
 

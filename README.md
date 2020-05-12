@@ -1,4 +1,5 @@
 ## 一款Android Studio插件，帮助你快速添加Google依赖库和查询历史版本
+>### 插件还在等待jetbrains审核😭还没通过(可能因为疫情原因，未能及时处理)，所以现在暂时只能通过[本地安装](https://github.com/wuyr/GoogleLibraryVersionQuerier#安装)，抱歉！
 ### 特性：
 #### 1. 编辑build.gradle时，会有代码提示：
 
@@ -21,10 +22,14 @@
 <br/>
 
 ### 安装：
+**在线安装：**
+
 插件还在等待jetbrains审核😭还没通过(可能因为疫情原因，未能及时处理)，所以现在暂时只能通过本地安装，抱歉！
 ~~*Android Studio -> Settings -> Plugins -> Marketplace*：<br/>搜索：***Google Library Version Querier***即可~~：
 
 ![preview](https://github.com/wuyr/GoogleLibraryVersionQuerier/raw/master/previews/8.png)
+
+**本地安装：**
 
 或者直接到 [releases](https://github.com/wuyr/GoogleLibraryVersionQuerier/releases) 里下载最新版的zip，然后把它拖进Android Studio中并重启。
 

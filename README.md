@@ -31,7 +31,7 @@
 
 **本地安装：**
 
-或者直接到 [releases](https://github.com/wuyr/GoogleLibraryVersionQuerier/releases) 里下载最新版的zip，然后把它拖进Android Studio中并重启。
+到 [releases](https://github.com/wuyr/GoogleLibraryVersionQuerier/releases) 里下载最新版的zip，解压后把里面的 	*GoogleLibraryVersionQuerier.zip*拖进Android Studio中并重启。
 
 <br/>
 

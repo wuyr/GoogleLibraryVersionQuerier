@@ -6,6 +6,7 @@ import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.codeInsight.completion.CompletionResultSet
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.util.TextRange
+import com.intellij.psi.PsiElement
 import com.intellij.util.PlatformIcons
 
 /**
@@ -16,14 +17,16 @@ import com.intellij.util.PlatformIcons
 class GradleContributor : CompletionContributor() {
 
     private var needShow = false
-    private val acceptFilesName = arrayOf("build.gradle")
+    private val acceptFilesType = arrayOf(".gradle")
 
     override fun beforeCompletion(context: CompletionInitializationContext) {
-        needShow = acceptFilesName.contains(context.file.name)
+        needShow = acceptFilesType.any { context.file.name.endsWith(it) }
     }
 
     override fun fillCompletionVariants(parameters: CompletionParameters, result: CompletionResultSet) {
+        println(parameters.process.isAutopopupCompletion)
         if (needShow) {
+            //TODO: 在这里记住原来的行内容
             val lineStartPosition = parameters.editor.caretModel.visualLineStart
             val lineEndPosition = parameters.editor.caretModel.visualLineEnd
             val currentLineContent = parameters.editor.document.getText(TextRange(lineStartPosition, lineEndPosition)).replace("\n".toRegex(), "").trim()
@@ -39,8 +42,16 @@ class GradleContributor : CompletionContributor() {
                         if (it.first() == "implementation") removeImplementation = true
                         it.last()
                     }
-                    matchingLibraries(keyword).forEach { e ->
-                        result.addElement(e.toLookupElement(removeImplementation))
+                    //TODO： 记住keyword的startPos和endPos，等下插入时remove掉
+                    if (keyword.contains(":")) {
+                        matchingLibraries2(keyword).forEach { e ->
+                            result.addElement(e.toLookupElement(removeImplementation))
+                        }
+                    } else {
+                        matchingLibraries(keyword).forEach { e ->
+                            result.addElement(e.toLookupElement(removeImplementation))
+                        }
+
                     }
                 }
             }
@@ -49,8 +60,20 @@ class GradleContributor : CompletionContributor() {
         super.fillCompletionVariants(parameters, result)
     }
 
+    override fun invokeAutoPopup(position: PsiElement, typeChar: Char): Boolean {
+        println("invokeAutoPopup")
+//        return super.invokeAutoPopup(position, typeChar)
+        return needShow
+    }
+
     private fun Pair<String, String>.toLookupElement(removeImplementation: Boolean) = LookupElementBuilder
             .create(if (removeImplementation) first.replace("implementation ", "") else first)
-            .bold().withIcon(PlatformIcons.LIBRARY_ICON).withTypeText(second, true)
+            .bold().withIcon(PlatformIcons.LIBRARY_ICON).withTypeText(second, true).setInsertHandler { p0, p1 ->
+                val lineStartPosition = p0.editor.caretModel.visualLineStart
+                val lineEndPosition = p0.editor.caretModel.visualLineEnd
+                val currentLineContent = p0.editor.document.getText(TextRange(lineStartPosition, lineEndPosition)).replace("\n".toRegex(), "").trim()
+                p1.lookupString
+                println(currentLineContent)
+            }
             .withTypeIconRightAligned(true)
 }

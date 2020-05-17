@@ -34,24 +34,16 @@ class GradleContributor : CompletionContributor() {
             }
             currentLineContent.split("\\s+".toRegex()).let {
                 if (it.isNotEmpty()) {
-                    var removeImplementation = false
                     val keyword = if (it.size == 1) {
                         it.first()
                     } else {
-                        if (it.first() == "implementation") removeImplementation = true
                         it.last()
                     }
-                    if (keyword.contains(":")) {
-                        matchingLibraries2(keyword).forEach { e ->
-                            result.addElement(e.toLookupElement2())
-                        }
-                    } else {
-                        matchingLibraries(keyword).forEach { e ->
-                            result.addElement(e.toLookupElement(removeImplementation))
-                        }
-                        matchingLibraries2(":$keyword").forEach { e ->
-                            result.addElement(e.toLookupElement2())
-                        }
+                    matchingLibraries(keyword).forEach { e ->
+                        result.addElement(e.toLookupElement())
+                    }
+                    matchingLibraries2(if (keyword.contains(":")) keyword else ":$keyword").forEach { e ->
+                        result.addElement(e.toLookupElement())
                     }
                 }
             }
@@ -62,12 +54,7 @@ class GradleContributor : CompletionContributor() {
 
     override fun invokeAutoPopup(position: PsiElement, typeChar: Char) = true
 
-    private fun Pair<String, String>.toLookupElement(removeImplementation: Boolean) = LookupElementBuilder
-            .create(if (removeImplementation) first.replace("implementation ", "") else first)
-            .bold().withIcon(PlatformIcons.LIBRARY_ICON).withTypeText(second, true)
-            .withTypeIconRightAligned(true)
-
-    private fun Pair<String, String>.toLookupElement2() = LookupElementBuilder.create(first).bold()
+    private fun Pair<String, String>.toLookupElement() = LookupElementBuilder.create(first).bold()
             .withIcon(PlatformIcons.LIBRARY_ICON).withTypeText(second, true).withInsertHandler { context, item ->
                 val lineStartPosition = context.editor.caretModel.visualLineStart
                 val lineEndPosition = context.editor.caretModel.visualLineEnd

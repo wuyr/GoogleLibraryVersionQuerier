@@ -35,4 +35,34 @@
 
 <br/>
 
-### 数据来源：[wanandroid.com](https://wanandroid.com/maven_pom/index)
+### 数据来源：[wanandroid.com](https://wanandroid.com/maven_pom/index) ， [maven.aliyun.com](https://maven.aliyun.com/mvn/view)
+
+<br/>
+
+### 使用技巧:
+因为3.0版本支持了Maven、Jcenter仓库搜索，所以如果不加一些条件过滤的话，在编辑gradle文件时的代码提示可能会有很多名字相似的库，像这样：
+
+![preview](https://github.com/wuyr/GoogleLibraryVersionQuerier/raw/master/previews/9.png)
+
+遇到这种情况可以在前面加包名信息，格式：
+
+**group关键词（包名）**:**artifact关键词（仓库名）**
+
+示例：
+
+![preview](https://github.com/wuyr/GoogleLibraryVersionQuerier/raw/master/previews/10.png)
+
+可以看到过滤了group之后的搜索结果精准了很多。
+
+<br/>
+
+### 更新日志:
+
+ - **3.0** 支持Maven、Jcenter仓库搜索，支持所有.gradle文件。
+
+ - **2.1** 修复请求多次接口Bug。 
+
+ - **2.0** 加入编辑build.gradle文件时的代码提示和支持搜索历史版本。
+
+ - **1.0** 完成搜索和替换Google官方依赖库最新版本。
+     

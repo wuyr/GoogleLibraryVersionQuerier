@@ -22,7 +22,7 @@
 <br/>
 
 ### 使用技巧:
-因为3.0版本支持了Maven、Jcenter仓库搜索，所以如果不加一些条件过滤的话，在编辑gradle文件时的代码提示可能会有很多名字相似的库，像这样：
+3.0版本支持了Maven、Jcenter仓库搜索，如果不加一些条件过滤的话，在编辑gradle文件时的代码提示可能会有很多名字相似的库，像这样：
 
 ![preview](https://github.com/wuyr/GoogleLibraryVersionQuerier/raw/master/previews/9.png)
 

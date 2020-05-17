@@ -5,6 +5,7 @@ import com.intellij.codeInsight.completion.CompletionInitializationContext
 import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.codeInsight.completion.CompletionResultSet
 import com.intellij.codeInsight.lookup.LookupElementBuilder
+import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.util.PlatformIcons
@@ -24,9 +25,7 @@ class GradleContributor : CompletionContributor() {
     }
 
     override fun fillCompletionVariants(parameters: CompletionParameters, result: CompletionResultSet) {
-        println(parameters.process.isAutopopupCompletion)
         if (needShow) {
-            //TODO: 在这里记住原来的行内容
             val lineStartPosition = parameters.editor.caretModel.visualLineStart
             val lineEndPosition = parameters.editor.caretModel.visualLineEnd
             val currentLineContent = parameters.editor.document.getText(TextRange(lineStartPosition, lineEndPosition)).replace("\n".toRegex(), "").trim()
@@ -42,16 +41,17 @@ class GradleContributor : CompletionContributor() {
                         if (it.first() == "implementation") removeImplementation = true
                         it.last()
                     }
-                    //TODO： 记住keyword的startPos和endPos，等下插入时remove掉
                     if (keyword.contains(":")) {
                         matchingLibraries2(keyword).forEach { e ->
-                            result.addElement(e.toLookupElement(removeImplementation))
+                            result.addElement(e.toLookupElement2())
                         }
                     } else {
                         matchingLibraries(keyword).forEach { e ->
                             result.addElement(e.toLookupElement(removeImplementation))
                         }
-
+                        matchingLibraries2(":$keyword").forEach { e ->
+                            result.addElement(e.toLookupElement2())
+                        }
                     }
                 }
             }
@@ -60,20 +60,29 @@ class GradleContributor : CompletionContributor() {
         super.fillCompletionVariants(parameters, result)
     }
 
-    override fun invokeAutoPopup(position: PsiElement, typeChar: Char): Boolean {
-        println("invokeAutoPopup")
-//        return super.invokeAutoPopup(position, typeChar)
-        return needShow
-    }
+    override fun invokeAutoPopup(position: PsiElement, typeChar: Char) = true
 
     private fun Pair<String, String>.toLookupElement(removeImplementation: Boolean) = LookupElementBuilder
             .create(if (removeImplementation) first.replace("implementation ", "") else first)
-            .bold().withIcon(PlatformIcons.LIBRARY_ICON).withTypeText(second, true).setInsertHandler { p0, p1 ->
-                val lineStartPosition = p0.editor.caretModel.visualLineStart
-                val lineEndPosition = p0.editor.caretModel.visualLineEnd
-                val currentLineContent = p0.editor.document.getText(TextRange(lineStartPosition, lineEndPosition)).replace("\n".toRegex(), "").trim()
-                p1.lookupString
-                println(currentLineContent)
-            }
+            .bold().withIcon(PlatformIcons.LIBRARY_ICON).withTypeText(second, true)
             .withTypeIconRightAligned(true)
+
+    private fun Pair<String, String>.toLookupElement2() = LookupElementBuilder.create(first).bold()
+            .withIcon(PlatformIcons.LIBRARY_ICON).withTypeText(second, true).withInsertHandler { context, item ->
+                val lineStartPosition = context.editor.caretModel.visualLineStart
+                val lineEndPosition = context.editor.caretModel.visualLineEnd
+                val currentLineContent = context.editor.document.getText(TextRange(lineStartPosition, lineEndPosition))
+                var additionalIndex = 0
+                run {
+                    currentLineContent.forEachIndexed { index, char ->
+                        if (!char.isWhitespace()) {
+                            additionalIndex = index
+                            return@run
+                        }
+                    }
+                }
+                WriteCommandAction.runWriteCommandAction(context.project) {
+                    context.document.replaceString(lineStartPosition + additionalIndex, lineEndPosition - 1, item.lookupString)
+                }
+            }.withTypeIconRightAligned(true)
 }

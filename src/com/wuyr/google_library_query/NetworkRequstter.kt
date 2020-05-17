@@ -16,6 +16,7 @@ import javax.swing.DefaultListModel
  */
 
 const val BASE_URL = "https://wanandroid.com/maven_pom/"
+const val BASE_URL2 = "https://maven.aliyun.com/"
 
 @Throws(java.lang.Exception::class)
 fun getAvailableVersions(libraryGroup: String, libraryName: String) = search("$libraryGroup:$libraryName") { dataList ->
@@ -23,7 +24,7 @@ fun getAvailableVersions(libraryGroup: String, libraryName: String) = search("$l
         (this["artifactMap"] as? Map<String, Any>)?.run {
             (this[libraryName] as? List<Map<String, Any>>)?.map {
                 it["version"].toString()
-            }?.reversed()
+            }
         }
     }
 }
@@ -41,7 +42,7 @@ fun getAvailableVersions2(libraryGroup: String, libraryName: String) =
                         }
                     } else this).run { substring(0, lastIndex) }
                 }
-            }.reversed()
+            }
         }
 
 fun matchingLibraries(keyword: String) = ArrayList<Pair<String, String>>().apply {
@@ -105,8 +106,6 @@ inline fun <O> search(keyword: String, block: (List<Map<String, Any>>) -> O): O?
             }
         }
 
-const val BASE_URL2 = "https://maven.aliyun.com/"
-
 fun getSearchLibrariesUrl(libraryGroup: String, libraryName: String) =
         BASE_URL2 + "artifact/aliyunMaven/searchArtifactByGav?_input_charset=utf-8&groupId=$libraryGroup&repoId=jcenter&artifactId=$libraryName&version=*"
 
@@ -125,6 +124,7 @@ inline fun <O> String.request(block: (List<MutableMap<String, Any>>) -> O): O? =
 @Throws(java.lang.Exception::class)
 fun String.getAPIResponse(retryCount: Int): String? {
     var currentRetryCount = 0
+    var exception: Exception? = null
     while (currentRetryCount <= retryCount) {
         try {
             (URL(this).openConnection() as HttpsURLConnection).run {
@@ -135,18 +135,17 @@ fun String.getAPIResponse(retryCount: Int): String? {
                         it.readBytes().toString(Charsets.UTF_8)
                     }
                 } else {
-                    println(responseCode)
                     currentRetryCount++
                 }
             }
         } catch (e: Exception) {
+            exception = e
             if (e is SocketTimeoutException) {
-                println("timeout, retrying...")
                 currentRetryCount++
-            }
+            } else throw e
         }
     }
-    return null
+    exception?.let { throw  exception } ?: return null
 }
 
 inline fun <T, R> T.runSafely(block: (T) -> R) = try {

@@ -1,18 +1,20 @@
 <idea-plugin>
     <id>com.wuyr.google_library_query</id>
     <name>Google Library Version Querier</name>
-    <version>2.1</version>
+    <version>3.0</version>
     <vendor email="ifxcyr@gmail.com" url="https://www.github.com/wuyr">陈小缘</vendor>
 
     <description><![CDATA[
-      <p>A plugin to facilitate adding Google library dependencies and choice historical versions.</p>
+      <p>A plugin to facilitate adding library dependencies and choice historical versions.</p>
       <br/>
       <p><strong>Github: </strong><a href="https://github.com/wuyr/GoogleLibraryVersionQuerier"> github.com/wuyr/GoogleLibraryVersionQuerier</a></p>
       <br/>
-      <p>Powered by wanandroid.com</p>
+      <p>Powered by wanandroid.com, maven.aliyun.com</p>
     ]]></description>
 
     <change-notes><![CDATA[
+      <p><li><strong>3.0 </strong>Supported Jcenter libraries search.</li></p>
+
       <p><li><strong>2.1 </strong>Bug fixes.</li></p>
 
       <p><li><strong>2.0 </strong>Add build.gradle dependency code completion and free choice of historical version.</li></p>

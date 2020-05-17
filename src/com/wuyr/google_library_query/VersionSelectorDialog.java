@@ -39,13 +39,15 @@ public class VersionSelectorDialog extends JDialog {
     }
 
     public static void show(DefaultListModel<String> dataList, OnSelectedListener onSelectedListener) {
-        VersionSelectorDialog dialog = new VersionSelectorDialog(dataList, onSelectedListener);
-        dialog.pack();
-        final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        final int x = (screenSize.width - dialog.getWidth()) / 2;
-        final int y = (screenSize.height - dialog.getHeight()) / 2;
-        dialog.setLocation(x, y);
-        dialog.setVisible(true);
+        EventQueue.invokeLater(() -> {
+            VersionSelectorDialog dialog = new VersionSelectorDialog(dataList, onSelectedListener);
+            dialog.pack();
+            final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            final int x = (screenSize.width - dialog.getWidth()) / 2;
+            final int y = (screenSize.height - dialog.getHeight()) / 2;
+            dialog.setLocation(x, y);
+            dialog.setVisible(true);
+        });
     }
 
     public interface OnSelectedListener {

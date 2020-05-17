@@ -8,6 +8,7 @@ import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.TextRange
+import java.awt.EventQueue
 import java.io.PrintWriter
 import java.io.StringWriter
 import javax.swing.DefaultListModel
@@ -31,10 +32,11 @@ class QueryAction : AnAction() {
 
                 val semicolon = ":"
                 if (!currentLineContent.contains(semicolon)) {
-                    Messages.showErrorDialog("Please locate the line of the target library.", "Library Not Found")
+                    EventQueue.invokeAndWait {
+                        Messages.showErrorDialog("请将光标定位到目标依赖库所在行！", "找不到有效信息")
+                    }
                     return@thread
                 }
-
                 val singleQuotation = "'"
                 val doubleQuotation = "\""
 
@@ -45,6 +47,9 @@ class QueryAction : AnAction() {
                 val libraryEndIndex = currentLineContent.lastIndexOf(quotation)
 
                 if (libraryStartIndex < 0 || libraryEndIndex < libraryStartIndex) {
+                    EventQueue.invokeAndWait {
+                        Messages.showErrorDialog("请将光标定位到目标依赖库所在行！", "找不到有效信息")
+                    }
                     return@thread
                 }
                 val libraryInfo = currentLineContent.substring(libraryStartIndex + 1, libraryEndIndex).split(semicolon).toTypedArray()
@@ -71,17 +76,23 @@ class QueryAction : AnAction() {
                                 }
                             }
                         } else {
-                            Messages.showErrorDialog("Please check if the library belongs to Google.", "Library Not Found")
+                            EventQueue.invokeAndWait {
+                                Messages.showErrorDialog("请检查关键词是否正确，以及确保该依赖库已发布到Google、Maven、Jcenter仓库上！", "找不到该依赖库")
+                            }
                         }
+                    } ?: EventQueue.invokeAndWait {
+                        Messages.showErrorDialog("请检查关键词是否正确，以及确保该依赖库已发布到Google、Maven、Jcenter仓库上！", "找不到该依赖库")
                     }
-                            ?: Messages.showErrorDialog("Please check if the library belongs to Google.", "Library Not Found")
                 } catch (e: Exception) {
-                    Messages.showErrorDialog(StringWriter().apply {
-                        PrintWriter(this).apply {
-                            println("Please copy the following log and go to https://github.com/wuyr/GoogleLibraryVersionQuerier to create a issues:\n")
-                            e.printStackTrace(this)
-                        }
-                    }.toString(), "Error")
+                    EventQueue.invokeAndWait {
+                        Messages.showErrorDialog(StringWriter().apply {
+                            PrintWriter(this).apply {
+                                println("查找依赖库历史版本时出错！")
+                                println("若不能通过以下log分析到具体原因（如出现UnknownHostException、SocketTimeoutException等Exception，请检查网络是否正常）\n请复制以下log到 https://github.com/wuyr/GoogleLibraryVersionQuerier 上提issue:\n")
+                                e.printStackTrace(this)
+                            }
+                        }.toString(), "出错了")
+                    }
                 }
             }
         }

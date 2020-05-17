@@ -26,7 +26,7 @@
 
 ![preview](https://github.com/wuyr/GoogleLibraryVersionQuerier/raw/master/previews/9.png)
 
-遇到这种情况可以在前面加包名信息，格式：
+遇到这种情况可以在前面加包名信息，格式如下：
 
 **group关键词(包名)**:**artifact关键词(仓库名)**
 

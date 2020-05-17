@@ -53,7 +53,7 @@
 <br/>
 
 ### 数据来源：[wanandroid.com](https://wanandroid.com/maven_pom/index) ， [maven.aliyun.com](https://maven.aliyun.com/mvn/view)
-
+### 感谢[鸿神](https://www.wanandroid.com/)提供技术支持
 
 <br/>
 

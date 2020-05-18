@@ -34,14 +34,10 @@ class GradleContributor : CompletionContributor() {
             }
             currentLineContent.split("\\s+".toRegex()).let {
                 if (it.isNotEmpty()) {
-                    val keyword = if (it.size == 1) {
-                        it.first()
-                    } else {
-                        it.last()
-                    }
-                    matchingLibraries(keyword).forEach { e ->
-                        result.addElement(e.toLookupElement())
-                    }
+                    val keyword = it.run { if (size == 1) first() else last() }
+
+                    matchingLibraries(keyword).forEach { e -> result.addElement(e.toLookupElement()) }
+
                     matchingLibraries2(if (keyword.contains(":")) keyword else ":$keyword").forEach { e ->
                         result.addElement(e.toLookupElement())
                     }

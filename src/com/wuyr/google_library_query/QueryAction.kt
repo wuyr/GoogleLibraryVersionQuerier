@@ -32,9 +32,7 @@ class QueryAction : AnAction() {
 
                 val semicolon = ":"
                 if (!currentLineContent.contains(semicolon)) {
-                    EventQueue.invokeAndWait {
-                        Messages.showErrorDialog("请将光标定位到目标依赖库所在行！", "找不到有效信息")
-                    }
+                    showLibraryInfoNotFoundDialog()
                     return@thread
                 }
                 val singleQuotation = "'"
@@ -47,9 +45,7 @@ class QueryAction : AnAction() {
                 val libraryEndIndex = currentLineContent.lastIndexOf(quotation)
 
                 if (libraryStartIndex < 0 || libraryEndIndex < libraryStartIndex) {
-                    EventQueue.invokeAndWait {
-                        Messages.showErrorDialog("请将光标定位到目标依赖库所在行！", "找不到有效信息")
-                    }
+                    showLibraryInfoNotFoundDialog()
                     return@thread
                 }
                 val libraryInfo = currentLineContent.substring(libraryStartIndex + 1, libraryEndIndex).split(semicolon).toTypedArray()
@@ -64,7 +60,9 @@ class QueryAction : AnAction() {
                     }
 
                     versionList?.let {
-                        if (it.isNotEmpty()) {
+                        if (it.isEmpty()) {
+                            showLibraryNotFoundDialog()
+                        } else {
                             VersionSelectorDialog.show(DefaultListModel<String>().apply { it.forEach { e -> addElement(e) } }) { selectedVersion ->
                                 val oldVersionStart = currentLineContent.lastIndexOf(semicolon)
                                 val oldVersionEnd = currentLineContent.lastIndexOf(if (isSingleQuotation) singleQuotation else doubleQuotation)
@@ -75,26 +73,32 @@ class QueryAction : AnAction() {
                                     editor.document.replaceString(lineStartPosition, lineEndPosition, newLineContent)
                                 }
                             }
-                        } else {
-                            EventQueue.invokeAndWait {
-                                Messages.showErrorDialog("请检查关键词是否正确，以及确保该依赖库已发布到Google、Maven、Jcenter仓库上！", "找不到该依赖库")
-                            }
                         }
-                    } ?: EventQueue.invokeAndWait {
-                        Messages.showErrorDialog("请检查关键词是否正确，以及确保该依赖库已发布到Google、Maven、Jcenter仓库上！", "找不到该依赖库")
-                    }
+                    } ?: showLibraryNotFoundDialog()
                 } catch (e: Exception) {
-                    EventQueue.invokeAndWait {
-                        Messages.showErrorDialog(StringWriter().apply {
-                            PrintWriter(this).apply {
-                                println("查找依赖库历史版本时出错！")
-                                println("若不能通过以下log分析到具体原因（如出现UnknownHostException、SocketTimeoutException等Exception，请检查网络是否正常）\n请复制以下log到 https://github.com/wuyr/GoogleLibraryVersionQuerier 上提issue:\n")
-                                e.printStackTrace(this)
-                            }
-                        }.toString(), "出错了")
-                    }
+                    showErrorDialog(e)
                 }
             }
         }
     }
+
+    private fun showErrorDialog(e: Exception) = EventQueue.invokeAndWait {
+        Messages.showErrorDialog(StringWriter().apply {
+            PrintWriter(this).apply {
+                println("查找依赖库历史版本时出错！")
+                println("若不能通过以下log分析到具体原因（如出现UnknownHostException、SocketTimeoutException等Exception，请检查网络是否正常）\n" +
+                        "请复制以下log到 https://github.com/wuyr/GoogleLibraryVersionQuerier 上提issue:\n")
+                e.printStackTrace(this)
+            }
+        }.toString(), "出错了")
+    }
+
+    private fun showLibraryNotFoundDialog() = EventQueue.invokeAndWait {
+        Messages.showErrorDialog("请检查关键词是否正确，以及确保该依赖库已发布到Google、Maven、Jcenter仓库上！", "找不到该依赖库")
+    }
+
+    private fun showLibraryInfoNotFoundDialog() = EventQueue.invokeAndWait {
+        Messages.showErrorDialog("请将光标定位到目标依赖库所在行！", "找不到有效信息")
+    }
+
 }

@@ -42,13 +42,14 @@
 **在线安装：**
 
 插件还在等待jetbrains审核😭还没通过(可能因为疫情原因，未能及时处理)，所以现在暂时只能通过本地安装，抱歉！
+
 ~~*Android Studio -> Settings -> Plugins -> Marketplace*：<br/>搜索：***Google Library Version Querier***即可~~：
 
 ![preview](https://github.com/wuyr/GoogleLibraryVersionQuerier/raw/master/previews/8.png)
 
 **本地安装：**
 
-到 [releases](https://github.com/wuyr/GoogleLibraryVersionQuerier/releases) 里下载最新版的zip，解压后把里面的 *GoogleLibraryVersionQuerier.zip* 拖进Android Studio中并重启。
+到 [releases](https://github.com/wuyr/GoogleLibraryVersionQuerier/releases) 里下载 *GoogleLibraryVersionQuerier.zip* 后拖把它拖进Android Studio中并重启。
 
 <br/>
 

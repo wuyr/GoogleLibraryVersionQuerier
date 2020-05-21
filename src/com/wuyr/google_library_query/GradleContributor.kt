@@ -7,8 +7,8 @@ import com.intellij.codeInsight.completion.CompletionResultSet
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.util.TextRange
-import com.intellij.psi.PsiElement
 import com.intellij.util.PlatformIcons
+import java.io.StringReader
 
 /**
  * @author wuyr
@@ -22,6 +22,21 @@ class GradleContributor : CompletionContributor() {
 
     override fun beforeCompletion(context: CompletionInitializationContext) {
         needShow = acceptFilesType.any { context.file.name.endsWith(it) }
+        if (needShow) {
+            val lines = StringReader(context.editor.document.text).readLines()
+            var currentLineNumber = context.editor.run { document.getLineNumber(caretModel.offset) }
+            run {
+                //TODO: 用Stack存放{}，成对取出
+                while (currentLineNumber >= 0 && currentLineNumber < lines.size) {
+                    val currentLine = lines[currentLineNumber]
+                    if (currentLine.let { it.contains("dependencies") && it.contains('{') }) {
+                        return@run
+                    }
+                    currentLineNumber--
+                }
+                needShow = false
+            }
+        }
     }
 
     override fun fillCompletionVariants(parameters: CompletionParameters, result: CompletionResultSet) {
@@ -47,8 +62,6 @@ class GradleContributor : CompletionContributor() {
         }
         super.fillCompletionVariants(parameters, result)
     }
-
-    override fun invokeAutoPopup(position: PsiElement, typeChar: Char) = true
 
     private fun Pair<String, String>.toLookupElement() = LookupElementBuilder.create(first).bold()
             .withIcon(PlatformIcons.LIBRARY_ICON).withTypeText(second, true).withInsertHandler { context, item ->

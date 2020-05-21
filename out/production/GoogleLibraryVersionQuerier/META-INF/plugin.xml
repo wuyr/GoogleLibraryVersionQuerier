@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.wuyr.google_library_query</id>
     <name>Google Library Version Querier</name>
-    <version>3.0</version>
+    <version>3.1</version>
     <vendor email="ifxcyr@gmail.com" url="https://www.github.com/wuyr">陈小缘</vendor>
 
     <description><![CDATA[
@@ -13,6 +13,8 @@
     ]]></description>
 
     <change-notes><![CDATA[
+      <p><li><strong>3.1 </strong>Bug fixes.</li></p>
+
       <p><li><strong>3.0 </strong>Supported Jcenter libraries search.</li></p>
 
       <p><li><strong>2.1 </strong>Bug fixes.</li></p>

@@ -23,20 +23,25 @@ class GradleContributor : CompletionContributor() {
     override fun beforeCompletion(context: CompletionInitializationContext) {
         needShow = acceptFilesType.any { context.file.name.endsWith(it) }
         if (needShow) {
-            val lines = StringReader(context.editor.document.text).readLines()
-            var currentLineNumber = context.editor.run { document.getLineNumber(caretModel.offset) }
-            run {
-                //TODO: 用Stack存放{}，成对取出
-                while (currentLineNumber >= 0 && currentLineNumber < lines.size) {
-                    val currentLine = lines[currentLineNumber]
-                    if (currentLine.let { it.contains("dependencies") && it.contains('{') }) {
-                        return@run
-                    }
-                    currentLineNumber--
-                }
-                needShow = false
-            }
+            needShow = isInDependenciesBlock(context)
         }
+    }
+
+    private fun isInDependenciesBlock(context: CompletionInitializationContext): Boolean {
+        val lines = StringReader(context.editor.document.text).readLines()
+        var currentLineNumber = context.editor.run { document.getLineNumber(caretModel.offset) }
+        var braceStartCount = 0
+        var braceEndCount = 0
+        while (currentLineNumber >= 0 && currentLineNumber < lines.size) {
+            val currentLine = lines[currentLineNumber]
+            braceStartCount += currentLine.count { it == '{' }
+            braceEndCount += currentLine.count { it == '}' }
+            if (currentLine.let { it.contains("dependencies") && it.contains('{') }) {
+                return braceStartCount - braceEndCount == 1
+            }
+            currentLineNumber--
+        }
+        return false
     }
 
     override fun fillCompletionVariants(parameters: CompletionParameters, result: CompletionResultSet) {

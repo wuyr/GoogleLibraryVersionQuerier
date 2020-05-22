@@ -64,18 +64,8 @@ fun matchingLibraries2(keyword: String) = ArrayList<Pair<String, String>>().appl
     runSafely {
         keyword.split(":").let { libraryInfo ->
             if (libraryInfo.size > 1) {
-                val libraryGroup = when {
-                    libraryInfo.size > 2 && libraryInfo[0].isEmpty() -> libraryInfo[1]
-                    libraryInfo[0].isEmpty() -> "*"
-                    else -> "*${libraryInfo[0]}*"
-                }.run { if (isEmpty()) "*" else this }
-                val libraryName = when {
-                    libraryInfo.size > 3 && libraryInfo[3].isEmpty() -> libraryInfo[2]
-                    libraryInfo.size > 2 && libraryInfo[2].isEmpty() -> libraryInfo[1]
-                    libraryInfo.size > 2 && libraryInfo[0].isEmpty() -> if (libraryInfo[2].isEmpty()) "*" else "*${libraryInfo[2]}*"
-                    else -> if (libraryInfo[1].isEmpty()) "*" else "*${libraryInfo[1]}*"
-                }.run { if (isEmpty()) "*" else this }
-
+                val libraryGroup = libraryInfo.libraryGroup
+                val libraryName = libraryInfo.libraryName
                 if (libraryGroup.length >= 5 || libraryName.length >= 5) {
                     getSearchLibrariesUrl(libraryGroup, libraryName).request { result ->
                         result.filter {
@@ -98,6 +88,27 @@ fun matchingLibraries2(keyword: String) = ArrayList<Pair<String, String>>().appl
     }
 }
 
+val List<String>.libraryGroup
+    get() = when {
+        size > 2 && this[0].isEmpty() -> this[1]
+        this[0].isEmpty() -> "*"
+        else -> "*${this[0]}*"
+    }.run { if (isEmpty()) "*" else this }
+
+val List<String>.libraryName
+    get() = when {
+        this.size > 3 && this[3].isEmpty() -> this[2]
+        size > 2 && this[2].isEmpty() -> this[1]
+        size > 2 && this[0].isEmpty() -> if (this[2].isEmpty()) "*" else "*${this[2]}*"
+        else -> if (this[1].isEmpty()) "*" else "*${this[1]}*"
+    }.run { if (isEmpty()) "*" else this }
+
+fun getSearchLibrariesUrl(libraryGroup: String, libraryName: String) =
+        BASE_URL2 + "artifact/aliyunMaven/searchArtifactByGav?_input_charset=utf-8&groupId=$libraryGroup&repoId=jcenter&artifactId=$libraryName&version=*"
+
+fun getSearchAvailableVersionsUrl(libraryGroup: String, libraryName: String) =
+        BASE_URL2 + "browse/tree?_input_charset=utf-8&repoId=jcenter&path=${libraryGroup.replace('.', '/')}/$libraryName/"
+
 @Throws(java.lang.Exception::class)
 inline fun <O> search(keyword: String, block: (List<Map<String, Any>>) -> O): O? =
         (BASE_URL + "search/json?k=$keyword").getAPIResponse(1)?.let { json ->
@@ -105,12 +116,6 @@ inline fun <O> search(keyword: String, block: (List<Map<String, Any>>) -> O): O?
                 block(this)
             }
         }
-
-fun getSearchLibrariesUrl(libraryGroup: String, libraryName: String) =
-        BASE_URL2 + "artifact/aliyunMaven/searchArtifactByGav?_input_charset=utf-8&groupId=$libraryGroup&repoId=jcenter&artifactId=$libraryName&version=*"
-
-fun getSearchAvailableVersionsUrl(libraryGroup: String, libraryName: String) =
-        BASE_URL2 + "browse/tree?_input_charset=utf-8&repoId=jcenter&path=${libraryGroup.replace('.', '/')}/$libraryName/"
 
 @Throws(java.lang.Exception::class)
 inline fun <O> String.request(block: (List<MutableMap<String, Any>>) -> O): O? = getAPIResponse(1)?.let { json ->

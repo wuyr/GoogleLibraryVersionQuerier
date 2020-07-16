@@ -130,8 +130,8 @@ class QueryAction : AnAction() {
     private fun showErrorDialog(e: Exception) = EventQueue.invokeAndWait {
         Messages.showErrorDialog(StringWriter().use { sw ->
             PrintWriter(sw).use { pw ->
-                println("查找依赖库历史版本时出错！")
-                println("若不能通过以下log分析到具体原因（如出现UnknownHostException、SocketTimeoutException等Exception，请检查网络是否正常）\n" +
+                pw.println("查找依赖库历史版本时出错！")
+                pw.println("若不能通过以下log分析到具体原因（如出现UnknownHostException、SocketTimeoutException等Exception，请检查网络是否正常）\n" +
                         "请复制以下log到 https://github.com/wuyr/GoogleLibraryVersionQuerier 上提issue:\n")
                 e.printStackTrace(pw)
             }

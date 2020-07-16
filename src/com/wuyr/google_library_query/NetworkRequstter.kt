@@ -133,8 +133,8 @@ fun String.getAPIResponse(retryCount: Int): String? {
     while (currentRetryCount <= retryCount) {
         try {
             (URL(this).openConnection() as HttpsURLConnection).run {
-                connectTimeout = 3000
-                readTimeout = 3000
+                connectTimeout = 5000
+                readTimeout = 5000
                 if (responseCode == 200) {
                     return inputStream.use {
                         it.readBytes().toString(Charsets.UTF_8)

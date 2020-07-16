@@ -1,5 +1,6 @@
 package com.wuyr.google_library_query
 
+import com.intellij.codeInsight.AutoPopupController
 import com.intellij.codeInsight.completion.CompletionContributor
 import com.intellij.codeInsight.completion.CompletionInitializationContext
 import com.intellij.codeInsight.completion.CompletionParameters
@@ -8,7 +9,10 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.util.TextRange
 import com.intellij.util.PlatformIcons
+import com.jetbrains.rd.util.measureTimeMillis
+import java.awt.EventQueue
 import java.io.StringReader
+import kotlin.concurrent.thread
 
 /**
  * @author wuyr
@@ -18,6 +22,7 @@ import java.io.StringReader
 class GradleContributor : CompletionContributor() {
 
     private var needShow = false
+    private var elementList = ArrayList<Pair<String, String>>()
     private val acceptFilesType = arrayOf(".gradle")
 
     override fun beforeCompletion(context: CompletionInitializationContext) {
@@ -44,26 +49,49 @@ class GradleContributor : CompletionContributor() {
         return false
     }
 
+    private var lastCurrentLineContent = ""
+
     override fun fillCompletionVariants(parameters: CompletionParameters, result: CompletionResultSet) {
         if (needShow) {
-            val lineStartPosition = parameters.editor.caretModel.visualLineStart
-            val lineEndPosition = parameters.editor.caretModel.visualLineEnd
-            val currentLineContent = parameters.editor.document.getText(TextRange(lineStartPosition, lineEndPosition)).replace("\n".toRegex(), "").trim()
-            if (currentLineContent.length < 4) {
-                return
-            }
-            currentLineContent.split("\\s+".toRegex()).let {
-                if (it.isNotEmpty()) {
-                    val keyword = it.run { if (size == 1) first() else last() }
-
-                    matchingLibraries(keyword).forEach { e -> result.addElement(e.toLookupElement()) }
-
-                    matchingLibraries2(if (keyword.contains(":")) keyword else ":$keyword").forEach { e ->
-                        result.addElement(e.toLookupElement())
+            if (elementList.isNotEmpty()) {
+                val lineStartPosition = parameters.editor.caretModel.visualLineStart
+                val lineEndPosition = parameters.editor.caretModel.visualLineEnd
+                if (parameters.editor.document.getText(TextRange(lineStartPosition, lineEndPosition)).replace("\n".toRegex(), "").trim().contains(lastCurrentLineContent)) {
+                    elementList.forEach { e -> result.addElement(e.toLookupElement()) }
+                } else {
+                    println("内容不匹配：$lastCurrentLineContent\n${parameters.editor.document.getText(TextRange(lineStartPosition, lineEndPosition)).replace("\n".toRegex(), "").trim()}")
+                    result.stopHere()
+                }
+                elementList.clear()
+            } else {
+                val lineStartPosition = parameters.editor.caretModel.visualLineStart
+                val lineEndPosition = parameters.editor.caretModel.visualLineEnd
+                val currentLineContent = parameters.editor.document.getText(TextRange(lineStartPosition, lineEndPosition)).replace("\n".toRegex(), "").trim()
+                if (currentLineContent.length < 4) {
+                    return
+                }
+                //TODO: 如果跟上次内容一样，则不用搜索
+                currentLineContent.split("\\s+".toRegex()).let {
+                    if (it.isNotEmpty()) {
+                        val keyword = it.run { if (size == 1) first() else last() }
+                        println("start query $currentLineContent")
+                        //TODO: 加线程池 核心线程一个，处理结果前先判断是否被打断
+                        thread {
+                            println(measureTimeMillis {
+                                elementList.clear()
+                                elementList.addAll(matchingLibraries(keyword))
+                                elementList.addAll(matchingLibraries2(if (keyword.contains(":")) keyword else ":$keyword"))
+                                EventQueue.invokeLater {
+                                    AutoPopupController.getInstance(parameters.editor.project!!).autoPopupMemberLookup(parameters.editor, null)
+                                }
+                            })
+                        }
                     }
                 }
             }
             needShow = false
+        } else {
+            if (elementList.isNotEmpty()) elementList.clear()
         }
         super.fillCompletionVariants(parameters, result)
     }

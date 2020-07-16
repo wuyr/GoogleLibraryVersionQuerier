@@ -133,8 +133,8 @@ fun String.getAPIResponse(retryCount: Int): String? {
     while (currentRetryCount <= retryCount) {
         try {
             (URL(this).openConnection() as HttpsURLConnection).run {
-                connectTimeout = 5000
-                readTimeout = 5000
+                connectTimeout = 3000
+                readTimeout = 3000
                 if (responseCode == 200) {
                     return inputStream.use {
                         it.readBytes().toString(Charsets.UTF_8)
@@ -161,8 +161,8 @@ inline fun <T, R> T.runSafely(block: (T) -> R) = try {
 }
 
 fun main() {
-    val libraryGroup = "com.squareup.okhttp3"
-    val libraryName = "okhttp"
+    val libraryGroup = "org.jsoup"
+    val libraryName = "jsoup"
     println("json: " + getAvailableVersions(libraryGroup, libraryName))
     println("json: " + getAvailableVersions2(libraryGroup, libraryName))
     println("matchingLibraries: " + matchingLibraries2(":com.squareup.okhttp3:okhttp:"))

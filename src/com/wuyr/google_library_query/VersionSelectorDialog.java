@@ -2,8 +2,11 @@ package com.wuyr.google_library_query;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
+import static javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW;
 
 /**
  * @author wuyr
@@ -36,6 +39,9 @@ public class VersionSelectorDialog extends JDialog {
                 dispose();
             }
         });
+
+        rootPane.registerKeyboardAction(actionEvent -> dispose(),
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), WHEN_IN_FOCUSED_WINDOW);
     }
 
     public static void show(DefaultListModel<String> dataList, OnSelectedListener onSelectedListener) {

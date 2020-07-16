@@ -23,6 +23,51 @@ import kotlin.concurrent.thread
 @Suppress("ConstantConditionIf")
 class QueryAction : AnAction() {
 
+    //版本降序
+    private val versionComparator = Comparator<String> { v1, v2 ->
+        //对比索引记录
+        var v1CompareCursor = 0
+        var v2CompareCursor = 0
+        val digitRange = '0'..'9'
+        while (v1CompareCursor < v1.length && v2CompareCursor < v2.length) {
+            //数字结束索引
+            var v1DigitSegmentEndIndex = v1CompareCursor
+            for (index in v1CompareCursor until v1.length) {
+                if (v1[index] !in digitRange) break
+                v1DigitSegmentEndIndex++
+            }
+            var v2DigitSegmentEndIndex = v2CompareCursor
+            for (index in v2CompareCursor until v2.length) {
+                if (v2[index] !in digitRange) break
+                v2DigitSegmentEndIndex++
+            }
+            if (v1DigitSegmentEndIndex > v1CompareCursor && v2DigitSegmentEndIndex > v2CompareCursor) {
+                //数字长度
+                val v1DigitSegmentCount = v1DigitSegmentEndIndex - v1CompareCursor
+                val v2DigitSegmentCount = v2DigitSegmentEndIndex - v2CompareCursor
+                if (v1DigitSegmentCount != v2DigitSegmentCount)
+                //长度不相等
+                    return@Comparator v2DigitSegmentCount - v1DigitSegmentCount
+
+                repeat(v1DigitSegmentCount) { index ->
+                    if (v1[v1CompareCursor + index] != v2[v2CompareCursor + index])
+                    //数字不相等
+                        return@Comparator v2[v2CompareCursor + index] - v1[v1CompareCursor + index]
+                }
+                v1CompareCursor = v1DigitSegmentEndIndex
+                v2CompareCursor = v2DigitSegmentEndIndex
+            } else {
+                //其中一方无数字
+                if (v1[v1CompareCursor] != v2[v2CompareCursor])
+                    return@Comparator v2[v2CompareCursor] - v1[v1CompareCursor]
+                v1CompareCursor++
+                v2CompareCursor++
+            }
+        }
+        //部分内容完全相同
+        v2.length - v1.length
+    }
+
     override fun actionPerformed(event: AnActionEvent) {
         thread {
             event.getData(CommonDataKeys.EDITOR)?.let { editor ->
@@ -57,7 +102,7 @@ class QueryAction : AnAction() {
                         if (isNullOrEmpty()) {
                             getAvailableVersions2(libraryGroup, libraryName)
                         } else this
-                    }
+                    }?.sortedWith(versionComparator)
 
                     versionList?.let {
                         if (it.isEmpty()) {
@@ -83,13 +128,14 @@ class QueryAction : AnAction() {
     }
 
     private fun showErrorDialog(e: Exception) = EventQueue.invokeAndWait {
-        Messages.showErrorDialog(StringWriter().apply {
-            PrintWriter(this).apply {
+        Messages.showErrorDialog(StringWriter().use { sw ->
+            PrintWriter(sw).use { pw ->
                 println("查找依赖库历史版本时出错！")
                 println("若不能通过以下log分析到具体原因（如出现UnknownHostException、SocketTimeoutException等Exception，请检查网络是否正常）\n" +
                         "请复制以下log到 https://github.com/wuyr/GoogleLibraryVersionQuerier 上提issue:\n")
-                e.printStackTrace(this)
+                e.printStackTrace(pw)
             }
+            sw.toString()
         }.toString(), "出错了")
     }
 

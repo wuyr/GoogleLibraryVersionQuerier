@@ -60,6 +60,8 @@
 
 ### 更新日志:
 
+ - **3.3** 修复兼容性问题，现最低兼容到AndroidStudio3.0；优化体验：右键菜单选项『Query available versions』只在编辑.gradle文件时显示；『Query available versions』的快捷键改为『CTRL ALT Q』，因原来的『ALT Q』与其他快捷键有冲突；
+
  - **3.2** 优化查询，彻底修复编辑gradle文件卡顿的问题；查询可用版本改为倒序排序；加入监听ESC键关闭版本选择对话框。
 
  - **3.1** 修复键入任何字符和在任何文件下也会弹提示的Bug，加入限制:只有在.gradle文件中的dependencies作用域内才会搜索仓库。

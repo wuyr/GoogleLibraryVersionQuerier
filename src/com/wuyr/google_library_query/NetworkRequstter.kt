@@ -3,6 +3,8 @@
 package com.wuyr.google_library_query
 
 import com.google.gson.Gson
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
 import java.net.SocketTimeoutException
 import java.net.URL
 import java.net.URLDecoder
@@ -151,6 +153,12 @@ fun String.getAPIResponse(retryCount: Int): String? {
         }
     }
     exception?.let { throw  exception } ?: return null
+}
+
+private fun InputStream.readBytes(): ByteArray {
+    val buffer = ByteArrayOutputStream(maxOf(DEFAULT_BUFFER_SIZE, this.available()))
+    copyTo(buffer)
+    return buffer.toByteArray()
 }
 
 inline fun <T, R> T.runSafely(block: (T) -> R) = try {

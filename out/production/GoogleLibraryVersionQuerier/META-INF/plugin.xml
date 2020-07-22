@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.wuyr.google_library_query</id>
     <name>Google Library Version Querier</name>
-    <version>3.2</version>
+    <version>3.3</version>
     <vendor email="ifxcyr@gmail.com" url="https://www.github.com/wuyr">陈小缘</vendor>
 
     <description><![CDATA[
@@ -13,6 +13,8 @@
     ]]></description>
 
     <change-notes><![CDATA[
+      <p><li><strong>3.3 </strong>Compatibility issues fixes.</li></p>
+
       <p><li><strong>3.2 </strong>Bug fixes.</li></p>
 
       <p><li><strong>3.1 </strong>Bug fixes.</li></p>
@@ -27,7 +29,7 @@
       <br>
     ]]></change-notes>
 
-    <idea-version since-build="173.0"/>
+    <idea-version since-build="171.0"/>
 
     <depends>com.intellij.modules.lang</depends>
 
@@ -40,7 +42,7 @@
         <action id="com.wuyr.google_library_query.QueryAction" class="com.wuyr.google_library_query.QueryAction"
                 text="Query Available Versions" description="Query available versions">
             <add-to-group group-id="XmlGenerateToolsGroup"/>
-            <keyboard-shortcut keymap="$default" first-keystroke="alt Q"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="control alt Q"/>
         </action>
     </actions>
 

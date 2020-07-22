@@ -132,5 +132,5 @@ class GradleContributor : CompletionContributor() {
                 WriteCommandAction.runWriteCommandAction(context.project) {
                     context.document.replaceString(lineStartPosition + additionalIndex, lineEndPosition - 1, item.lookupString)
                 }
-            }.withTypeIconRightAligned(true)
+            }
 }

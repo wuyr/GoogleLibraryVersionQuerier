@@ -68,6 +68,18 @@ class QueryAction : AnAction() {
         v2.length - v1.length
     }
 
+    private val acceptFilesType = arrayOf(".gradle")
+
+    override fun update(event: AnActionEvent) {
+        acceptFilesType.any { event.getData(CommonDataKeys.PSI_FILE)?.name?.endsWith(it) ?: false }.let { enable ->
+            event.presentation.run {
+                isEnabled = enable
+                isVisible = enable
+            }
+        }
+        super.update(event)
+    }
+
     override fun actionPerformed(event: AnActionEvent) {
         thread {
             event.getData(CommonDataKeys.EDITOR)?.let { editor ->

@@ -1,5 +1,5 @@
 ## 一款Android Studio插件，帮助你快速添加依赖库和查询历史版本
->### 插件还在等待jetbrains审核😭还没通过(可能因为疫情原因，未能及时处理)，所以现在暂时只能通过[本地安装](https://github.com/wuyr/GoogleLibraryVersionQuerier#安装)，抱歉！
+>### 终于审核通过啦，现在可以直接在AS里检查更新了~
 ### 特性：
 #### 1. 编辑build.gradle时，会有代码提示：
 
@@ -9,7 +9,7 @@
 
 <br/>
 
-#### 2. 光标定位到目标类库所在行，右键可快速查看和替换某个版本：
+#### 2. 光标定位到目标类库所在行，右键（快捷键『CTRL ALT Q』）可快速查看和替换某个版本：
 
 ![preview](https://github.com/wuyr/GoogleLibraryVersionQuerier/raw/master/previews/3.gif) ![preview](https://github.com/wuyr/GoogleLibraryVersionQuerier/raw/master/previews/4.gif)
 
@@ -41,15 +41,13 @@
 ### 安装：
 **在线安装：**
 
-插件还在等待jetbrains审核😭还没通过(可能因为疫情原因，未能及时处理)，所以现在暂时只能通过本地安装，抱歉！
-
-~~*Android Studio -> Settings -> Plugins -> Marketplace*：<br/>搜索：***Google Library Version Querier***即可~~：
+*Android Studio -> Settings -> Plugins -> Marketplace*：<br/>搜索：***Google Library Version Querier***即可：
 
 ![preview](https://github.com/wuyr/GoogleLibraryVersionQuerier/raw/master/previews/8.png)
 
 **本地安装：**
 
-到 [releases](https://github.com/wuyr/GoogleLibraryVersionQuerier/releases) 里下载 *GoogleLibraryVersionQuerier.zip* 后拖把它拖进Android Studio中并重启。
+到 [releases](https://github.com/wuyr/GoogleLibraryVersionQuerier/releases) 里下载最新 *GoogleLibraryVersionQuerier.zip* 后拖把它拖进Android Studio中并重启。
 
 <br/>
 
